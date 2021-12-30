@@ -17,6 +17,7 @@
 #import "UIView+LNPopupSupportPrivate.h"
 #import "LNPopupCustomBarViewController+Private.h"
 @import ObjectiveC;
+@import Evander;
 
 #if TARGET_OS_MACCATALYST
 @import AppKit;
@@ -377,7 +378,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		return;
 	}
 	
-	[UIView animateWithDuration:resolvedStyle == LNPopupInteractionStyleSnap ? 0.65 : 0.5 delay:0.0 usingSpringWithDamping:spring ? 0.8 : 1.0 initialSpringVelocity:0 options:UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState animations:animationBlock completion:completionBlock];
+	[FRUIView animateWithDuration:resolvedStyle == LNPopupInteractionStyleSnap ? 0.65 : 0.5 delay:0.0 usingSpringWithDamping:spring ? 0.8 : 1.0 initialSpringVelocity:0 options:UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState animations:animationBlock completion:completionBlock];
 }
 
 - (void)_popupBarLongPressGestureRecognized:(UILongPressGestureRecognizer*)lpgr
@@ -614,7 +615,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		{
 			_statusBarThresholdDir = -_statusBarThresholdDir;
 			
-			[UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:0 animations:^{
+			[FRUIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:0 animations:^{
 				[_containerController setNeedsStatusBarAppearanceUpdate];
 			} completion:nil];
 		}
@@ -1109,7 +1110,7 @@ static void __LNPopupControllerDeeplyEnumerateSubviewsUsingBlock(UIView* view, v
 		
 		[_containerController.view layoutIfNeeded];
 		
-		[UIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^ {
+		[FRUIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^ {
 			CGRect barFrame = self.popupBar.frame;
 			barFrame.size.height = _LNPopupBarHeightForBarStyle(_LNPopupResolveBarStyleFromBarStyle(self.popupBar.barStyle), self.popupBar.isInlineWithTabBar, self.popupBar.customBarViewController);
             if (self.popupBar.isInlineWithTabBar){
@@ -1209,7 +1210,7 @@ static void __LNPopupControllerDeeplyEnumerateSubviewsUsingBlock(UIView* view, v
 			
 			_LNCallDelegateObjectBool(_containerController, @selector(popupPresentationControllerWillDismissPopupBar:animated:), animated);
 			
-			[UIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^
+			[FRUIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^
 			 {
 				 CGRect barFrame = self.popupBar.frame;
 				 barFrame.size.height = 0;

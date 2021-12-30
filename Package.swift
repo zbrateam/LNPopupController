@@ -18,11 +18,13 @@ let package = Package(
 			type: .static,
 			targets: ["LNPopupController"]),
 	],
-	dependencies: [],
+	dependencies: [
+        .package(url: "https://github.com/elihwyma/Evander", .branch("main"))
+    ],
 	targets: [
 		.target(
 			name: "LNPopupController",
-			dependencies: [],
+			dependencies: ["Evander"],
 			path: "LNPopupController",
 			exclude: [
 				"LNPopupControllerExample",

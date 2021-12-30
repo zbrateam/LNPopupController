@@ -6,6 +6,7 @@
 //
 
 #import "LNChevronView.h"
+@import Evander;
 
 static const CGFloat _LNChevronDefaultWidth = 4.67;
 static const CGFloat _LNChevronAngleCoefficient = 42.5714286;
@@ -137,7 +138,7 @@ IB_DESIGNABLE
 	}
 	else
 	{
-		[UIView animateWithDuration:_animationDuration animations:transition];
+		[FRUIView animateWithDuration:_animationDuration animations:transition];
 	}
 }
 

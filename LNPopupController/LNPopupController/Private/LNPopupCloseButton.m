@@ -9,6 +9,7 @@
 #import "LNPopupCloseButton+Private.h"
 @import ObjectiveC;
 #import "LNChevronView.h"
+@import Evander;
 
 @implementation LNPopupCloseButton
 {
@@ -198,7 +199,7 @@
 	};
 	
 	if (animated) {
-		[UIView animateWithDuration:0.47 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+		[FRUIView animateWithDuration:0.47 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
 			alphaBlock();
 		} completion:nil];
 	} else {

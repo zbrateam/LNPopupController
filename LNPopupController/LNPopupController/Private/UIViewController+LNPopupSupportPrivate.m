@@ -12,6 +12,7 @@
 
 @import ObjectiveC;
 @import Darwin;
+@import Evander;
 
 static const void* LNToolbarHiddenBeforeTransition = &LNToolbarHiddenBeforeTransition;
 static const void* LNPopupAdjustingInsets = &LNPopupAdjustingInsets;
@@ -499,7 +500,7 @@ UIEdgeInsets _LNPopupChildAdditiveSafeAreas(id self)
 	if(self.popupContentViewController)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[UIView animateWithDuration:UIApplication.sharedApplication.statusBarOrientationAnimationDuration delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0.0 options: UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent animations:^{
+			[FRUIView animateWithDuration:UIApplication.sharedApplication.statusBarOrientationAnimationDuration delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0.0 options: UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent animations:^{
 				[self.popupContentViewController _uLFSBAIO];
 				[self._ln_popupController_nocreate.popupContentView _repositionPopupCloseButton];
 			} completion:nil];
@@ -651,7 +652,7 @@ UIEdgeInsets _LNPopupChildAdditiveSafeAreas(id self)
 	}
 	else if(self._ln_popupController_nocreate.popupControllerInternalState == LNPopupPresentationStateBarHidden && extensionView.superview != nil)
 	{
-		[UIView animateWithDuration:0.15 animations:^{
+		[FRUIView animateWithDuration:0.15 animations:^{
 			extensionView.alpha = 0.0;
 		} completion:^(BOOL finished) {
 			removeFromSuperview();
@@ -1248,7 +1249,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	}
 	else
 	{
-		[UIView animateWithDuration:duration animations:animations completion:completion];
+		[FRUIView animateWithDuration:duration animations:animations completion:completion];
 	}
 }
 
