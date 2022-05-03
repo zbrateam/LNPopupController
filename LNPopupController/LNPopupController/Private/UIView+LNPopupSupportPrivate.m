@@ -161,6 +161,14 @@ static void _LNNotify(UIView* self, NSMutableArray<LNInWindowBlock>* waiting)
 #endif
 }
 
+- (UIEdgeInsets)_ln_safeAreaInsets {
+	if (@available(iOS 11, *))
+	{
+		return self.safeAreaInsets;
+	}
+	return UIEdgeInsetsZero;
+}
+
 @end
 
 #if TARGET_OS_MACCATALYST

@@ -17,6 +17,7 @@ typedef void (^LNInWindowBlock)(dispatch_block_t);
 - (void)_ln_letMeKnowWhenViewInWindowHierarchy:(LNInWindowBlock)block;
 - (void)_ln_forgetAboutIt;
 - (nullable NSString*)_effectGroupingIdentifierIfAvailable;
+- (UIEdgeInsets)_ln_safeAreaInsets;
 
 @end
 

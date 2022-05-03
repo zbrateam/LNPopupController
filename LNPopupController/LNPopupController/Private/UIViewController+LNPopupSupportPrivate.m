@@ -9,6 +9,7 @@
 #import "UIViewController+LNPopupSupportPrivate.h"
 #import "LNPopupController.h"
 #import "_LNPopupSwizzlingUtils.h"
+#import "UIView+LNPopupSupportPrivate.h"
 
 @import ObjectiveC;
 @import Darwin;
@@ -178,14 +179,17 @@ static void __accessibilityBundleLoadHandler()
 			LNSwizzleMethod(self,
 							@selector(viewDidLayoutSubviews),
 							@selector(_ln_popup_viewDidLayoutSubviews));
-			
-			LNSwizzleMethod(self,
-							@selector(additionalSafeAreaInsets),
-							@selector(_ln_additionalSafeAreaInsets));
-			
-			LNSwizzleMethod(self,
-							@selector(setAdditionalSafeAreaInsets:),
-							@selector(_ln_setAdditionalSafeAreaInsets:));
+
+			if (@available(iOS 11, *))
+			{
+				LNSwizzleMethod(self,
+								@selector(additionalSafeAreaInsets),
+								@selector(_ln_additionalSafeAreaInsets));
+
+				LNSwizzleMethod(self,
+								@selector(setAdditionalSafeAreaInsets:),
+								@selector(_ln_setAdditionalSafeAreaInsets:));
+			}
 			
 			LNSwizzleMethod(self,
 							@selector(setNeedsStatusBarAppearanceUpdate),
@@ -263,8 +267,11 @@ static void __accessibilityBundleLoadHandler()
 static inline __attribute__((always_inline)) void _LNUpdateUserSafeAreaInsets(id self, UIEdgeInsets userEdgeInsets, UIEdgeInsets popupUserEdgeInsets)
 {
 	UIEdgeInsets final = __LNEdgeInsetsSum(userEdgeInsets, popupUserEdgeInsets);
-	
-	[self _ln_setAdditionalSafeAreaInsets:final];
+
+	if (@available(iOS 11, *))
+	{
+		[self _ln_setAdditionalSafeAreaInsets:final];
+	}
 }
 
 static inline __attribute__((always_inline)) void _LNSetPopupSafeAreaInsets(id self, UIEdgeInsets additionalSafeAreaInsets)
@@ -521,7 +528,7 @@ UIEdgeInsets _LNPopupChildAdditiveSafeAreas(id self)
 {
 	if([self _isContainedInPopupController])
 	{
-		return __LNEdgeInsetsSum(self.popupPresentationContainerViewController.view.safeAreaInsets, UIEdgeInsetsMake(0, 0, - _LNPopupSafeAreas(self.popupPresentationContainerViewController).bottom, 0));		
+		return __LNEdgeInsetsSum(self.popupPresentationContainerViewController.view._ln_safeAreaInsets, UIEdgeInsetsMake(0, 0, - _LNPopupSafeAreas(self.popupPresentationContainerViewController).bottom, 0));
 	}
 	
 	UIEdgeInsets insets = [self _vSAIFS];
@@ -770,7 +777,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 
 - (UIEdgeInsets)insetsForBottomDockingView
 {
-	return self.tabBar.hidden == NO && self._isTabBarHiddenDuringTransition == NO ? UIEdgeInsetsZero : self.view.superview.safeAreaInsets;
+	return self.tabBar.hidden == NO && self._isTabBarHiddenDuringTransition == NO ? UIEdgeInsetsZero : self.view.superview._ln_safeAreaInsets;
 }
 
 - (CGRect)defaultFrameForBottomDockingView
@@ -858,7 +865,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	
 	if(self._ignoringLayoutDuringTransition == NO)
 	{
-		CGFloat bottomSafeArea = self.view.superview.safeAreaInsets.bottom;
+		CGFloat bottomSafeArea = self.view.superview._ln_safeAreaInsets.bottom;
 		self._ln_bottomBarExtension_nocreate.frame = CGRectMake(0, self.view.bounds.size.height - bottomSafeArea, self.view.bounds.size.width, bottomSafeArea);
 	}
 }
@@ -912,7 +919,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	{
 		[self _setIgnoringLayoutDuringTransition:YES];
 		
-		CGFloat bottomSafeArea = self.view.superview.safeAreaInsets.bottom;
+		CGFloat bottomSafeArea = self.view.superview._ln_safeAreaInsets.bottom;
 		
 		[self _layoutPopupBarOrderForTransition];
 		
@@ -1037,10 +1044,10 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 {
 	CGRect toolbarBarFrame = self.toolbar.frame;
 	
-	CGFloat bottomSafeAreaHeight = self.view.safeAreaInsets.bottom;
+	CGFloat bottomSafeAreaHeight = self.view._ln_safeAreaInsets.bottom;
 	if([NSStringFromClass(self.nonMemoryLeakingPresentationController.class) containsString:@"Preview"] == NO)
 	{
-		bottomSafeAreaHeight -= self.view.window.safeAreaInsets.bottom;
+		bottomSafeAreaHeight -= self.view.window._ln_safeAreaInsets.bottom;
 	}
 	
 	toolbarBarFrame.origin = CGPointMake(toolbarBarFrame.origin.x, self.view.bounds.size.height - (self.isToolbarHidden ? 0.0 : toolbarBarFrame.size.height) - bottomSafeAreaHeight);
@@ -1055,7 +1062,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 		return UIEdgeInsetsZero;
 	}
 	
-	return UIEdgeInsetsMake(0, 0, MAX(self.view.superview.safeAreaInsets.bottom, self.view.window.safeAreaInsets.bottom), 0);
+	return UIEdgeInsetsMake(0, 0, MAX(self.view.superview._ln_safeAreaInsets.bottom, self.view.window._ln_safeAreaInsets.bottom), 0);
 }
 
 + (void)load
@@ -1126,7 +1133,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	
 	if(self._ignoringLayoutDuringTransition == NO)
 	{
-		CGFloat bottomSafeArea = self.view.superview.safeAreaInsets.bottom;
+		CGFloat bottomSafeArea = self.view.superview._ln_safeAreaInsets.bottom;
 		self._ln_bottomBarExtension_nocreate.frame = CGRectMake(0, self.view.bounds.size.height - bottomSafeArea, self.view.bounds.size.width, bottomSafeArea);
 	}
 }
@@ -1163,7 +1170,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	[self._ln_popupController_nocreate _setContentToState:self._ln_popupController_nocreate.popupControllerInternalState];
 	
 	__block CGRect frame = self.toolbar.frame;
-	frame.size.height += self.view.superview.safeAreaInsets.bottom;
+	frame.size.height += self.view.superview._ln_safeAreaInsets.bottom;
 	if(edge != UIRectEdgeBottom)
 	{
 		frame.origin.x = self.view.bounds.size.width;
@@ -1183,7 +1190,7 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 	
 	self._ln_popupController_nocreate.popupBar.bottomShadowView.alpha = hidden == NO ? 0.0 : 1.0;
 	
-	CGFloat safeArea = self.view.superview.safeAreaInsets.bottom;
+	CGFloat safeArea = self.view.superview._ln_safeAreaInsets.bottom;
 	
 	[self _layoutPopupBarOrderForTransition];
 	
@@ -1201,7 +1208,10 @@ void _LNPopupSupportSetPopupInsetsForViewController(UIViewController* controller
 		else
 		{
 			frame = self.toolbar.frame;
-			frame.size.height += self.view.superview.safeAreaInsets.bottom;
+			if (@available(iOS 11, *))
+			{
+				frame.size.height += self.view.superview.safeAreaInsets.bottom;
+			}
 			if(edge != UIRectEdgeBottom)
 			{
 				frame.origin.x = self.view.bounds.size.width;

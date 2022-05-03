@@ -10,6 +10,7 @@
 #import "LNPopupCustomBarViewController+Private.h"
 #import "MarqueeLabel.h"
 #import "_LNPopupSwizzlingUtils.h"
+#import "UIView+LNPopupSupportPrivate.h"
 
 #ifndef LNPopupControllerEnforceStrictClean
 //_effectWithStyle:tintColor:invertAutomaticStyle:
@@ -305,7 +306,10 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 		_imageView.layer.cornerRadius = 6;
 		_imageView.layer.masksToBounds = YES;
 		// support smart invert and therefore do not invert image view colors
-		_imageView.accessibilityIgnoresInvertColors = YES;
+		if (@available(iOS 11, *))
+		{
+			_imageView.accessibilityIgnoresInvertColors = YES;
+		}
 		
 		[_contentView addSubview:_imageView];
 		
@@ -1147,12 +1151,12 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 	
 	if(layoutDirection == UIUserInterfaceLayoutDirectionLeftToRight)
 	{
-		CGFloat safeLeading = MAX(self.window.safeAreaInsets.left, self.layoutMargins.left);
+		CGFloat safeLeading = MAX(self.window._ln_safeAreaInsets.left, self.layoutMargins.left);
 		_imageView.center = CGPointMake(safeLeading + LNPopupBarProminentImageWidth / 2, LNPopupBarHeightProminent / 2);
 	}
 	else
 	{
-		CGFloat safeLeading = MAX(self.window.safeAreaInsets.right, self.layoutMargins.right);
+		CGFloat safeLeading = MAX(self.window._ln_safeAreaInsets.right, self.layoutMargins.right);
 		_imageView.center = CGPointMake(self.bounds.size.width - safeLeading - LNPopupBarProminentImageWidth / 2, LNPopupBarHeightProminent / 2);
 	}
 	

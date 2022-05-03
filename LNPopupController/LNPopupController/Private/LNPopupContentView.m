@@ -144,7 +144,12 @@ LNPopupCloseButtonStyle _LNPopupResolveCloseButtonStyleFromCloseButtonStyle(LNPo
 			
 			if(_popupCloseButtonCenterConstraint == nil)
 			{
-				_popupCloseButtonCenterConstraint = [self.popupCloseButton.centerXAnchor constraintEqualToAnchor:self.contentView.safeAreaLayoutGuide.centerXAnchor];
+				NSLayoutXAxisAnchor *otherAnchor = self.contentView.centerXAnchor;
+				if (@available(iOS 11, *))
+				{
+					otherAnchor = self.contentView.safeAreaLayoutGuide.centerXAnchor;
+				}
+				_popupCloseButtonCenterConstraint = [self.popupCloseButton.centerXAnchor constraintEqualToAnchor:otherAnchor];
 			}
 			
 			if(buttonStyle == LNPopupCloseButtonStyleRound)
@@ -221,7 +226,10 @@ LNPopupCloseButtonStyle _LNPopupResolveCloseButtonStyleFromCloseButtonStyle(LNPo
 	}
 	else
 	{
-		windowTopSafeAreaInset += self.window.safeAreaInsets.top;
+		if (@available(iOS 11, *))
+		{
+			windowTopSafeAreaInset += self.window.safeAreaInsets.top;
+		}
         if (windowTopSafeAreaInset == 0)
         {
             windowTopSafeAreaInset = [LNPopupController _statusBarHeightForView:self];
