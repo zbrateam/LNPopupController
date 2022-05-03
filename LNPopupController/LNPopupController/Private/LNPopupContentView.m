@@ -10,7 +10,6 @@
 #import "LNPopupContentView+Private.h"
 #import "LNPopupCloseButton+Private.h"
 #import <LNPopupController/UIViewController+LNPopupSupport.h>
-@import Evander;
 
 LNPopupCloseButtonStyle _LNPopupResolveCloseButtonStyleFromCloseButtonStyle(LNPopupCloseButtonStyle style)
 {
@@ -243,7 +242,7 @@ LNPopupCloseButtonStyle _LNPopupResolveCloseButtonStyleFromCloseButtonStyle(LNPo
 
 	if(startingTopConstant != _popupCloseButtonTopConstraint.constant)
 	{
-		[FRUIView animateWithDuration:0.25 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0.0 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent animations:^{
+		[UIView animateWithDuration:0.25 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0.0 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent animations:^{
 			[self layoutIfNeeded];
 		} completion:nil];
 	}

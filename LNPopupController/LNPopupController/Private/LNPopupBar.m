@@ -10,7 +10,6 @@
 #import "LNPopupCustomBarViewController+Private.h"
 #import "MarqueeLabel.h"
 #import "_LNPopupSwizzlingUtils.h"
-@import Evander;
 
 #ifndef LNPopupControllerEnforceStrictClean
 //_effectWithStyle:tintColor:invertAutomaticStyle:
@@ -222,7 +221,7 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 	
 	if(animated)
 	{
-		[FRUIView animateWithDuration:0.2 animations:block];
+		[UIView animateWithDuration:0.2 animations:block];
 	}
 	else
 	{
